@@ -1,0 +1,52 @@
+{
+  "name": "@johanthoren/parrotscribe-mcp-server",
+  "version": "0.1.0",
+  "description": "MCP server for ParrotScribe - expose transcription tools to AI agents",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "parrotscribe-mcp-server": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "start": "node dist/index.js",
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "inspect": "npx @modelcontextprotocol/inspector",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "parrotscribe",
+    "transcription",
+    "ai",
+    "llm",
+    "speech-to-text"
+  ],
+  "author": "Johan Thorén",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/johanthoren/parrotscribe-mcp.git"
+  },
+  "homepage": "https://github.com/johanthoren/parrotscribe-mcp#readme",
+  "bugs": {
+    "url": "https://github.com/johanthoren/parrotscribe-mcp/issues"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.25.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}

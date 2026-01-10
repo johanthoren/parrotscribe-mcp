@@ -58,7 +58,7 @@ function formatError(error: unknown): string {
 const server = new Server(
   {
     name: "parrotscribe-mcp-server",
-    version: "0.1.0",
+    version: "0.1.1",
   },
   {
     capabilities: {

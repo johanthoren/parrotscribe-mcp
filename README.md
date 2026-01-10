@@ -1,6 +1,6 @@
 # ParrotScribe MCP Server
 
-An [MCP (Model Context Protocol)](https://modelcontextprotocol.io) server that enables AI agents to interact with the [ParrotScribe](https://parrotscribe.app) transcription service on macOS. It acts as a bridge between the `pscribe` CLI and AI agents like Claude Desktop, Claude Code, or any MCP-compatible client.
+An [MCP (Model Context Protocol)](https://modelcontextprotocol.io) server that enables AI agents to interact with the [ParrotScribe](https://parrotscribe.com) transcription service on macOS. It acts as a bridge between the `pscribe` CLI and AI agents like Claude Desktop, Claude Code, or any MCP-compatible client.
 
 ## What It Does
 
@@ -13,7 +13,7 @@ ParrotScribe captures real-time audio from your microphone and system audio, tra
 
 ## Prerequisites
 
-- **macOS** with [ParrotScribe](https://parrotscribe.app) installed
+- **macOS** with [ParrotScribe](https://parrotscribe.com) installed
 - **Node.js** 18 or higher
 - The `pscribe` CLI must be available in your PATH
 
@@ -178,6 +178,6 @@ MIT
 
 ## Links
 
-- [ParrotScribe App](https://parrotscribe.app)
+- [ParrotScribe App](https://parrotscribe.com)
 - [Model Context Protocol](https://modelcontextprotocol.io)
 - [TOON Format](https://github.com/toon-format/toon)

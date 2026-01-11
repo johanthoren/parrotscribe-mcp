@@ -96,6 +96,7 @@ Add to your project's `.mcp.json` or global MCP config:
 | `pscribe_status` | Get service status, session ID, duration |
 | `pscribe_tail` | Get recent transcript entries with filtering |
 | `pscribe_cat` | Display complete sessions with time-based filtering |
+| `pscribe_grep` | Search for patterns across transcript sessions |
 | `pscribe_sessions` | List past transcription sessions |
 | `pscribe_new` | Force start a new session |
 
@@ -119,6 +120,19 @@ Add to your project's `.mcp.json` or global MCP config:
 | `status` | string | Filter: `all`, `confirmed`, `unconfirmed`, `speech` |
 
 Use `pscribe_cat` for historical queries like "summarize yesterday's standup" - the AI converts natural language time references to ISO8601.
+
+### pscribe_grep Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `pattern` | string | The pattern to search for (regex supported) - **required** |
+| `since` | string | Only search sessions starting after this ISO8601 timestamp |
+| `until` | string | Only search sessions starting before this ISO8601 timestamp |
+| `status` | string | Filter: `all`, `confirmed`, `unconfirmed`, `speech` |
+| `ignore_case` | boolean | Case-insensitive search |
+| `count` | boolean | Show match count per session instead of matches |
+
+Use `pscribe_grep` for queries like "did anyone mention deployment last week?" or "find all references to the API".
 
 ## Output Format: TOON
 

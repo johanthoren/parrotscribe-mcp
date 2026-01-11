@@ -28,6 +28,7 @@ The primary use case is real-time AI augmentation during live conversations, ser
 | `pscribe_status` | `pscribe status` | Returns service status, active session ID, and duration. |
 | `pscribe_tail` | `pscribe tail` | Returns transcript entries. Supports `since_line` for polling. |
 | `pscribe_cat` | `pscribe cat` | Returns complete sessions with time-based filtering. |
+| `pscribe_grep` | `pscribe grep` | Searches for patterns across transcript sessions. |
 | `pscribe_sessions`| `pscribe list` | Lists past transcription sessions. |
 | `pscribe_new` | `pscribe new` | Forces the start of a new transcription session. |
 
@@ -81,6 +82,34 @@ Returns complete transcript sessions in TOON format.
 - Historical queries: "summarize yesterday's standup" → `since: "2024-01-14T09:00:00+01:00", until: "2024-01-14T10:00:00+01:00"`
 - Recent sessions: "what was discussed last week" → `since: "2024-01-08T00:00:00+01:00"`
 - Specific sessions: retrieve by ID from `pscribe_sessions`
+
+### `pscribe_grep`
+**Input Schema**:
+```typescript
+{
+  pattern: z.string().describe("The pattern to search for (regex)"),
+  since: z.string().optional().describe("Only search sessions starting after this ISO8601 timestamp"),
+  until: z.string().optional().describe("Only search sessions starting before this ISO8601 timestamp"),
+  status: z.enum(["all", "confirmed", "unconfirmed", "speech"]).default("confirmed").describe("Filter by segment status"),
+  ignore_case: z.boolean().default(false).describe("Case-insensitive search"),
+  count: z.boolean().default(false).describe("Show match count per session instead of matches")
+}
+```
+**Output**:
+Returns matching transcript lines prefixed with session ID, or match counts per session if `count: true`.
+
+**Parameters**:
+- `pattern`: Regex pattern to search for (required)
+- `since`: ISO8601 timestamp - only search sessions starting after this time
+- `until`: ISO8601 timestamp - only search sessions starting before this time
+- `status`: Filter by segment status (default: confirmed)
+- `ignore_case`: Case-insensitive search (default: false)
+- `count`: Show match count per session instead of full matches (default: false)
+
+**Use Cases**:
+- Topic search: "did anyone mention deployment?" → `pattern: "deploy", ignore_case: true`
+- Time-bounded search: "references to API last week" → `pattern: "API", since: "2024-01-08T00:00:00+01:00"`
+- Statistics: "how often was testing mentioned?" → `pattern: "test", ignore_case: true, count: true`
 
 ## Configuration
 The server can be configured via environment variables:

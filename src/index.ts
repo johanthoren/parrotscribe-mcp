@@ -193,6 +193,47 @@ Convert natural language time references to ISO8601 (e.g., "yesterday morning" â
           },
         },
       },
+      {
+        name: "pscribe_grep",
+        description: `Search for patterns across transcript sessions.
+
+Use this for queries like "did anyone mention deployment last week?" or "find all references to the API".
+Returns matching lines with session ID prefix. Use --count for summary statistics.`,
+        inputSchema: {
+          type: "object",
+          properties: {
+            pattern: {
+              type: "string",
+              description: "The pattern to search for (regex supported).",
+            },
+            since: {
+              type: "string",
+              description:
+                "Only search sessions starting after this ISO8601 timestamp.",
+            },
+            until: {
+              type: "string",
+              description:
+                "Only search sessions starting before this ISO8601 timestamp.",
+            },
+            status: {
+              type: "string",
+              enum: ["all", "confirmed", "unconfirmed", "speech"],
+              description: "Filter by segment status (default: confirmed).",
+            },
+            ignore_case: {
+              type: "boolean",
+              description: "Case-insensitive search (default: false).",
+            },
+            count: {
+              type: "boolean",
+              description:
+                "Show match count per session instead of matches (default: false).",
+            },
+          },
+          required: ["pattern"],
+        },
+      },
     ],
   };
 });
@@ -298,6 +339,44 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         }
         if (status !== undefined) {
           pscribeArgs.push("--status", status);
+        }
+
+        const result = runPscribe(pscribeArgs);
+        return { content: [{ type: "text", text: result }] };
+      }
+      case "pscribe_grep": {
+        const pattern = args?.pattern as string;
+        const since = args?.since as string | undefined;
+        const until = args?.until as string | undefined;
+        const status = args?.status as string | undefined;
+        const ignore_case = args?.ignore_case as boolean | undefined;
+        const count = args?.count as boolean | undefined;
+
+        if (!pattern) {
+          return {
+            content: [
+              { type: "text", text: "[INVALID_PARAMS] pattern is required." },
+            ],
+            isError: true,
+          };
+        }
+
+        const pscribeArgs = ["grep", pattern];
+
+        if (since !== undefined) {
+          pscribeArgs.push("--since", since);
+        }
+        if (until !== undefined) {
+          pscribeArgs.push("--until", until);
+        }
+        if (status !== undefined) {
+          pscribeArgs.push("--status", status);
+        }
+        if (ignore_case) {
+          pscribeArgs.push("--ignore-case");
+        }
+        if (count) {
+          pscribeArgs.push("--count");
         }
 
         const result = runPscribe(pscribeArgs);

@@ -155,6 +155,44 @@ Returns: session ID, date, duration, segment count for each session.`,
           "Force start a new transcription session. Use when you want a clean session boundary. Returns confirmation with new session ID.",
         inputSchema: { type: "object", properties: {} },
       },
+      {
+        name: "pscribe_cat",
+        description: `Display complete transcript sessions with time-based filtering.${TOON_FORMAT_DOC}
+
+Use this for historical queries like "summarize yesterday's standup" or "what was discussed last week".
+Convert natural language time references to ISO8601 (e.g., "yesterday morning" → appropriate timestamp).`,
+        inputSchema: {
+          type: "object",
+          properties: {
+            session_ids: {
+              type: "array",
+              items: { type: "string" },
+              description:
+                "Session IDs to display (from pscribe_sessions). If omitted, uses time filters or --last.",
+            },
+            since: {
+              type: "string",
+              description:
+                "Show sessions starting after this ISO8601 timestamp (e.g., 2024-01-15T09:00:00+01:00).",
+            },
+            until: {
+              type: "string",
+              description:
+                "Show sessions starting before this ISO8601 timestamp.",
+            },
+            last: {
+              type: "number",
+              description: "Show last N sessions.",
+            },
+            status: {
+              type: "string",
+              enum: ["all", "confirmed", "unconfirmed", "speech"],
+              description:
+                "Filter by segment status (default: confirmed).",
+            },
+          },
+        },
+      },
     ],
   };
 });
@@ -235,6 +273,34 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       }
       case "pscribe_new": {
         const result = runPscribe(["new"]);
+        return { content: [{ type: "text", text: result }] };
+      }
+      case "pscribe_cat": {
+        const session_ids = args?.session_ids as string[] | undefined;
+        const since = args?.since as string | undefined;
+        const until = args?.until as string | undefined;
+        const last = args?.last as number | undefined;
+        const status = args?.status as string | undefined;
+
+        const pscribeArgs = ["cat"];
+
+        if (session_ids && session_ids.length > 0) {
+          pscribeArgs.push(...session_ids);
+        }
+        if (since !== undefined) {
+          pscribeArgs.push("--since", since);
+        }
+        if (until !== undefined) {
+          pscribeArgs.push("--until", until);
+        }
+        if (last !== undefined) {
+          pscribeArgs.push("--last", String(last));
+        }
+        if (status !== undefined) {
+          pscribeArgs.push("--status", status);
+        }
+
+        const result = runPscribe(pscribeArgs);
         return { content: [{ type: "text", text: result }] };
       }
       default:

@@ -27,6 +27,7 @@ The primary use case is real-time AI augmentation during live conversations, ser
 | `pscribe_stop` | `pscribe stop` | Stops/pauses the current transcription. |
 | `pscribe_status` | `pscribe status` | Returns service status, active session ID, and duration. |
 | `pscribe_tail` | `pscribe tail` | Returns transcript entries. Supports `since_line` for polling. |
+| `pscribe_cat` | `pscribe cat` | Returns complete sessions with time-based filtering. |
 | `pscribe_sessions`| `pscribe list` | Lists past transcription sessions. |
 | `pscribe_new` | `pscribe new` | Forces the start of a new transcription session. |
 
@@ -54,6 +55,32 @@ Returns transcript entries in TOON format.
   - `unconfirmed`: Only unconfirmed (tentative) transcriptions
   - `translated`: Only translated entries
   - `speech`: Confirmed, unconfirmed, and translated (excludes no_speech)
+
+### `pscribe_cat`
+**Input Schema**:
+```typescript
+{
+  session_ids: z.array(z.string()).optional().describe("Session IDs to display"),
+  since: z.string().optional().describe("Show sessions starting after this ISO8601 timestamp"),
+  until: z.string().optional().describe("Show sessions starting before this ISO8601 timestamp"),
+  last: z.number().int().min(1).optional().describe("Show last N sessions"),
+  status: z.enum(["all", "confirmed", "unconfirmed", "speech"]).default("confirmed").describe("Filter by segment status")
+}
+```
+**Output**:
+Returns complete transcript sessions in TOON format.
+
+**Parameters**:
+- `session_ids`: Specific session IDs to display (from `pscribe_sessions`)
+- `since`: ISO8601 timestamp - show sessions starting after this time
+- `until`: ISO8601 timestamp - show sessions starting before this time
+- `last`: Show last N sessions
+- `status`: Filter by segment status (default: confirmed)
+
+**Use Cases**:
+- Historical queries: "summarize yesterday's standup" → `since: "2024-01-14T09:00:00+01:00", until: "2024-01-14T10:00:00+01:00"`
+- Recent sessions: "what was discussed last week" → `since: "2024-01-08T00:00:00+01:00"`
+- Specific sessions: retrieve by ID from `pscribe_sessions`
 
 ## Configuration
 The server can be configured via environment variables:

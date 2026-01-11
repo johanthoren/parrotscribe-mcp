@@ -95,6 +95,7 @@ Add to your project's `.mcp.json` or global MCP config:
 | `pscribe_stop` | Stop/pause the current transcription |
 | `pscribe_status` | Get service status, session ID, duration |
 | `pscribe_tail` | Get recent transcript entries with filtering |
+| `pscribe_cat` | Display complete sessions with time-based filtering |
 | `pscribe_sessions` | List past transcription sessions |
 | `pscribe_new` | Force start a new session |
 
@@ -106,6 +107,18 @@ Add to your project's `.mcp.json` or global MCP config:
 | `since_line` | number | Start from line N (for polling) |
 | `status` | string | Filter: `all`, `confirmed`, `unconfirmed`, `translated`, `speech` |
 | `session_id` | string | Read from a specific session |
+
+### pscribe_cat Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `session_ids` | string[] | Session IDs to display (from pscribe_sessions) |
+| `since` | string | Show sessions starting after this ISO8601 timestamp |
+| `until` | string | Show sessions starting before this ISO8601 timestamp |
+| `last` | number | Show last N sessions |
+| `status` | string | Filter: `all`, `confirmed`, `unconfirmed`, `speech` |
+
+Use `pscribe_cat` for historical queries like "summarize yesterday's standup" - the AI converts natural language time references to ISO8601.
 
 ## Output Format: TOON
 

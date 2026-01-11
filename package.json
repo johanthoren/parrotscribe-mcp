@@ -1,6 +1,6 @@
 {
   "name": "@johanthoren/parrotscribe-mcp-server",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "MCP server for ParrotScribe - expose transcription tools to AI agents",
   "type": "module",
   "main": "dist/index.js",

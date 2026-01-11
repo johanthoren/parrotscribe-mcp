@@ -131,6 +131,9 @@ Use `pscribe_cat` for historical queries like "summarize yesterday's standup" - 
 | `status` | string | Filter: `all`, `confirmed`, `unconfirmed`, `speech` |
 | `ignore_case` | boolean | Case-insensitive search |
 | `count` | boolean | Show match count per session instead of matches |
+| `after_context` | number | Show N lines after each match (-A) |
+| `before_context` | number | Show N lines before each match (-B) |
+| `context` | number | Show N lines before and after each match (-C) |
 
 Use `pscribe_grep` for queries like "did anyone mention deployment last week?" or "find all references to the API".
 

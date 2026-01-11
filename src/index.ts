@@ -230,6 +230,18 @@ Returns matching lines with session ID prefix. Use --count for summary statistic
               description:
                 "Show match count per session instead of matches (default: false).",
             },
+            after_context: {
+              type: "number",
+              description: "Show N lines after each match (-A).",
+            },
+            before_context: {
+              type: "number",
+              description: "Show N lines before each match (-B).",
+            },
+            context: {
+              type: "number",
+              description: "Show N lines before and after each match (-C).",
+            },
           },
           required: ["pattern"],
         },
@@ -351,6 +363,9 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         const status = args?.status as string | undefined;
         const ignore_case = args?.ignore_case as boolean | undefined;
         const count = args?.count as boolean | undefined;
+        const after_context = args?.after_context as number | undefined;
+        const before_context = args?.before_context as number | undefined;
+        const context = args?.context as number | undefined;
 
         if (!pattern) {
           return {
@@ -377,6 +392,15 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         }
         if (count) {
           pscribeArgs.push("--count");
+        }
+        if (after_context !== undefined) {
+          pscribeArgs.push("-A", String(after_context));
+        }
+        if (before_context !== undefined) {
+          pscribeArgs.push("-B", String(before_context));
+        }
+        if (context !== undefined) {
+          pscribeArgs.push("-C", String(context));
         }
 
         const result = runPscribe(pscribeArgs);

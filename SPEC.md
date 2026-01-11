@@ -92,7 +92,10 @@ Returns complete transcript sessions in TOON format.
   until: z.string().optional().describe("Only search sessions starting before this ISO8601 timestamp"),
   status: z.enum(["all", "confirmed", "unconfirmed", "speech"]).default("confirmed").describe("Filter by segment status"),
   ignore_case: z.boolean().default(false).describe("Case-insensitive search"),
-  count: z.boolean().default(false).describe("Show match count per session instead of matches")
+  count: z.boolean().default(false).describe("Show match count per session instead of matches"),
+  after_context: z.number().int().min(0).optional().describe("Show N lines after each match"),
+  before_context: z.number().int().min(0).optional().describe("Show N lines before each match"),
+  context: z.number().int().min(0).optional().describe("Show N lines before and after each match")
 }
 ```
 **Output**:
@@ -105,6 +108,9 @@ Returns matching transcript lines prefixed with session ID, or match counts per 
 - `status`: Filter by segment status (default: confirmed)
 - `ignore_case`: Case-insensitive search (default: false)
 - `count`: Show match count per session instead of full matches (default: false)
+- `after_context`: Show N lines after each match (-A)
+- `before_context`: Show N lines before each match (-B)
+- `context`: Show N lines before and after each match (-C)
 
 **Use Cases**:
 - Topic search: "did anyone mention deployment?" → `pattern: "deploy", ignore_case: true`

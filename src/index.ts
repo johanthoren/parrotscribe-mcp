@@ -10,6 +10,7 @@ import {
   GetPromptRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
 import { execFileSync } from "child_process";
+import { deduplicateToonEntries } from "./dedup.js";
 
 const PSCRIBE_PATH = process.env.PSCRIBE_PATH || "pscribe";
 
@@ -132,6 +133,11 @@ For polling: call with since_line, note the last line number, then call again wi
               description:
                 "Session ID to read (from pscribe_sessions). Default: current session.",
             },
+            dedup: {
+              type: "boolean",
+              description:
+                "Deduplicate entries by segment ID, keeping confirmed over unconfirmed (default: false). Note: last_line metadata reflects raw line count before dedup.",
+            },
           },
         },
       },
@@ -190,6 +196,11 @@ Convert natural language time references to ISO8601 (e.g., "yesterday morning" â
               description:
                 "Filter by segment status (default: confirmed).",
             },
+            dedup: {
+              type: "boolean",
+              description:
+                "Deduplicate entries by segment ID, keeping confirmed over unconfirmed (default: false).",
+            },
           },
         },
       },
@@ -242,6 +253,11 @@ Returns matching lines with session ID prefix. Use --count for summary statistic
               type: "number",
               description: "Show N lines before and after each match (-C).",
             },
+            dedup: {
+              type: "boolean",
+              description:
+                "Deduplicate entries by segment ID, keeping confirmed over unconfirmed (default: false).",
+            },
           },
           required: ["pattern"],
         },
@@ -273,6 +289,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         const since_line = args?.since_line as number | undefined;
         const status = (args?.status as string) || "all";
         const session_id = args?.session_id as string | undefined;
+        const dedup = args?.dedup as boolean | undefined;
 
         // Validate mutually exclusive params
         if (since_line !== undefined && args?.n !== undefined) {
@@ -303,18 +320,24 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         const result = runPscribe(pscribeArgs);
         const lines = result ? result.split("\n").filter((l) => l.trim()) : [];
 
-        // Add metadata for polling
+        // Add metadata for polling (based on raw line count BEFORE dedup)
         const lastLineNum = since_line
           ? since_line - 1 + lines.length
           : lines.length;
 
-        const metadata = `--- ${lines.length} entries, last_line: ${lastLineNum} ---`;
+        // Apply deduplication if requested
+        const outputLines = dedup ? deduplicateToonEntries(lines) : lines;
+
+        const metadata = `--- ${outputLines.length} entries, last_line: ${lastLineNum} ---`;
 
         return {
           content: [
             {
               type: "text",
-              text: lines.length > 0 ? `${result}\n${metadata}` : metadata,
+              text:
+                outputLines.length > 0
+                  ? `${outputLines.join("\n")}\n${metadata}`
+                  : metadata,
             },
           ],
         };
@@ -334,6 +357,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         const until = args?.until as string | undefined;
         const last = args?.last as number | undefined;
         const status = args?.status as string | undefined;
+        const dedup = args?.dedup as boolean | undefined;
 
         const pscribeArgs = ["cat"];
 
@@ -354,6 +378,16 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         }
 
         const result = runPscribe(pscribeArgs);
+
+        // Apply deduplication if requested
+        if (dedup) {
+          const lines = result
+            ? result.split("\n").filter((l) => l.trim())
+            : [];
+          const dedupedLines = deduplicateToonEntries(lines);
+          return { content: [{ type: "text", text: dedupedLines.join("\n") }] };
+        }
+
         return { content: [{ type: "text", text: result }] };
       }
       case "pscribe_grep": {
@@ -366,6 +400,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         const after_context = args?.after_context as number | undefined;
         const before_context = args?.before_context as number | undefined;
         const context = args?.context as number | undefined;
+        const dedup = args?.dedup as boolean | undefined;
 
         if (!pattern) {
           return {
@@ -404,6 +439,16 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         }
 
         const result = runPscribe(pscribeArgs);
+
+        // Apply deduplication if requested
+        if (dedup) {
+          const lines = result
+            ? result.split("\n").filter((l) => l.trim())
+            : [];
+          const dedupedLines = deduplicateToonEntries(lines);
+          return { content: [{ type: "text", text: dedupedLines.join("\n") }] };
+        }
+
         return { content: [{ type: "text", text: result }] };
       }
       default:

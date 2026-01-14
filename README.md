@@ -1,6 +1,6 @@
 # ParrotScribe MCP Server
 
-An [MCP (Model Context Protocol)](https://modelcontextprotocol.io) server that enables AI agents to interact with the [ParrotScribe](https://parrotscribe.com) transcription service on macOS. It acts as a bridge between the `pscribe` CLI and AI agents like Claude Desktop, Claude Code, or any MCP-compatible client.
+An [MCP (Model Context Protocol)](https://modelcontextprotocol.io) server that enables AI agents to interact with the [ParrotScribe](https://parrotscribe.com) transcription service on macOS. It acts as a bridge between the `pscribe` CLI and AI agents like Opencode, Claude Desktop, Claude Code, or any MCP-compatible client.
 
 ## What It Does
 

@@ -17,6 +17,9 @@
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
     "inspect": "npx @modelcontextprotocol/inspector",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:run": "vitest run",
     "prepublishOnly": "npm run build"
   },
   "keywords": [
@@ -46,7 +49,9 @@
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
+    "@vitest/ui": "^4.0.17",
     "tsx": "^4.19.2",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "vitest": "^4.0.17"
   }
 }

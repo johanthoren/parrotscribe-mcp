@@ -4,7 +4,7 @@ An [MCP (Model Context Protocol)](https://modelcontextprotocol.io) server that e
 
 ## Meet Lex: Your Tactical Meeting Copilot
 
-If you are using **Opencode**, we provide a pre-configured agent called **Lex**. Lex transforms passive transcription into an active research and navigation tool.
+If you are using **Opencode**, I provide a pre-configured agent called **Lex**. Lex transforms passive transcription into an active research and navigation tool.
 
 - **Real-time Context**: Ask "What's that?" or "What did they just say?" to get instant explanations.
 - **Zero-Latency Knowledge**: Proactively loads domain-specific skills based on transcript keywords.

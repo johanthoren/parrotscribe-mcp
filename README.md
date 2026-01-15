@@ -4,7 +4,7 @@ An [MCP (Model Context Protocol)](https://modelcontextprotocol.io) server that e
 
 ## Meet Lex: Your Tactical Meeting Copilot
 
-If you are using **Opencode**, I provide a pre-configured agent called **Lex**. Lex transforms passive transcription into an active research and navigation tool.
+If you are using **Opencode**, I recommend that you use the pre-configured agent called **Lex**. Lex transforms passive transcription into an active research and navigation tool.
 
 - **Real-time Context**: Ask "What's that?" or "What did they just say?" to get instant explanations.
 - **Zero-Latency Knowledge**: Proactively loads domain-specific skills based on transcript keywords.
@@ -30,7 +30,7 @@ ParrotScribe captures real-time audio from your microphone and system audio, tra
 
 - **macOS** with [ParrotScribe](https://parrotscribe.com) installed
 - **Node.js** 18 or higher
-- The `pscribe` CLI must be available in your PATH
+- The `pscribe` CLI must be available in your PATH (it will be if ParrotScribe is installed correctly)
 
 ## Installation
 
@@ -66,9 +66,24 @@ node dist/index.js
 
 ## Configuration
 
-### Claude Desktop
+### Opencode
 
-Add to your `claude_desktop_config.json` (typically at `~/Library/Application Support/Claude/claude_desktop_config.json`):
+Add to your `~/.config/opencode/opencode.jsonc`:
+
+```jsonc
+{
+  "mcp": {
+    "parrotscribe": {
+      "type": "local",
+      "command": ["npx", "@johanthoren/parrotscribe-mcp-server"]
+    }
+  }
+}
+```
+
+### Claude Code
+
+Add to your project's `.mcp.json` or global MCP config:
 
 ```json
 {
@@ -81,9 +96,9 @@ Add to your `claude_desktop_config.json` (typically at `~/Library/Application Su
 }
 ```
 
-### Claude Code
+### Claude Desktop
 
-Add to your project's `.mcp.json` or global MCP config:
+Add to your `claude_desktop_config.json` (typically at `~/Library/Application Support/Claude/claude_desktop_config.json`):
 
 ```json
 {

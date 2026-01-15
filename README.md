@@ -111,11 +111,11 @@ Add to your `claude_desktop_config.json` (typically at `~/Library/Application Su
 }
 ```
 
-### Environment Variables
+### Environment Variables (Optional)
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `PSCRIBE_PATH` | Path to the `pscribe` executable | `pscribe` |
+| `PSCRIBE_PATH` | Path to the `pscribe` executable. Only needed if `pscribe` is not in your PATH (edge case). | `pscribe` |
 
 ## Available Tools
 

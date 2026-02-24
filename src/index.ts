@@ -604,6 +604,9 @@ Keep a running list of:
 async function run() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
+  console.error(
+    "[DEPRECATED] parrotscribe-mcp-server continues to work with Parrot Scribe versions before 0.4.0, but is unsupported on 0.4.0 and newer. Use Parrot Scribe's integrated MCP server."
+  );
   console.error("ParrotScribe MCP Server running on stdio");
 }
 

@@ -1,7 +1,7 @@
 {
   "name": "@johanthoren/parrotscribe-mcp-server",
-  "version": "0.3.1",
-  "description": "MCP server for ParrotScribe - expose transcription tools to AI agents",
+  "version": "0.3.2",
+  "description": "[DEPRECATED] Legacy MCP server for ParrotScribe (replaced by integrated MCP in 0.4.0)",
   "type": "module",
   "main": "dist/index.js",
   "bin": {
@@ -23,6 +23,8 @@
     "prepublishOnly": "npm run build"
   },
   "keywords": [
+    "deprecated",
+    "legacy",
     "mcp",
     "model-context-protocol",
     "parrotscribe",

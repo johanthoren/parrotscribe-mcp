@@ -1,4 +1,8 @@
-# ParrotScribe MCP Server & Lex Copilot
+# ParrotScribe MCP Server (Deprecated) & Lex Copilot
+
+> [!WARNING]
+> This MCP server is deprecated. It will **continue to work** for users who stay on Parrot Scribe versions before `0.4.0`, but it will **not** work once you upgrade to `0.4.0` or newer.
+> Use the integrated MCP server built into Parrot Scribe instead.
 
 An [MCP (Model Context Protocol)](https://modelcontextprotocol.io) server that enables AI agents to interact with the [ParrotScribe](https://parrotscribe.com) transcription service on macOS.
 
@@ -12,7 +16,7 @@ If you are using **Opencode**, I recommend that you use the pre-configured agent
 - **Persona-Ready**: Tailor Lex to any role (Journalist, Researcher, Engineer) via private directives.
 
 ### Installing Lex
-1. Ensure this MCP server is configured in your environment.
+1. Ensure you are on Parrot Scribe `< 0.4.0` and this MCP server is configured in your environment.
 2. Copy `agent/lex.md` from this repository into your local `.opencode/agent/` directory.
 
 ---
@@ -31,8 +35,11 @@ ParrotScribe captures real-time audio from your microphone and system audio, tra
 - **macOS** with [ParrotScribe](https://parrotscribe.com) installed
 - **Node.js** 18 or higher
 - The `pscribe` CLI must be available in your PATH (it will be if ParrotScribe is installed correctly)
+- **Parrot Scribe version < 0.4.0** (once `0.4.0` is released, this package is unsupported)
 
-## Installation
+## Legacy Installation (Parrot Scribe < 0.4.0 only)
+
+If you are using Parrot Scribe `0.4.0` (or newer), do not install this package. Use the app's integrated MCP server.
 
 ### Option 1: NPX (Recommended)
 
